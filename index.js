@@ -1,13 +1,17 @@
-require("dotenv").config();
-const express = require('express');
-const userRouter = require('./api/modules/users/routers/user.router');
+require("./config/databse.config");
+const express = require("express");
+const cors = require("cors");
+const serviceRouter = require('./routes/service.route')
+
 const app = express();
 
-const PORT = process.env.API_PORT;
+app.use(cors("*"));
+
+const PORT = process.env.PORT || 5000;
 
 app.use(express.json());
-app.use('/api/users', userRouter);
+app.use('/api/services', serviceRouter);
 
 app.listen(PORT, () => {
-  console.log(`server running on port: ${PORT}`);
+  console.log(`Listening on port: ${PORT}`);
 })
