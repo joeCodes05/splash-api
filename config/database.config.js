@@ -12,15 +12,20 @@ database.connect((err) => {
   if (err) {
     console.log(`Error connecting to database`, err);
   } else {
-    // create service table
-    database.query(`CREATE TABLE IF NOT EXISTS services(
-      service_id INT(255) UNSIGNED PRIMARY KEY AUTO_INCREMENT,
-      service_name VARCHAR(255) NOT NULL,
-      service_desc VARCHAR(255) NOT NULL,
-      service_image VARCHAR(255) NOT NULL,
-      create_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    // create users table
+    database.query(`CREATE TABLE IF NOT EXISTS users(
+      user_id INT(255) UNSIGNED PRIMARY KEY AUTO_INCREMENT,
+      full_name VARCHAR(255) NOT NULL,
+      user_name VARCHAR(255) NOT NULL,
+      email VARCHAR(255) NOT NULL,
+      password VARCHAR(255) NOT NULL,
+      profile_image VARCHAR(255) NULL,
+      status TINYINT(5) DEFAULT 1,
+      token VARCHAR(100) NULL,
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
       updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
     ) CHARSET utf8mb4 COLLATE = utf8mb4_unicode_ci, ENGINE = InnoDB`);
+
     console.log("Connection to database successful");
   }
 });
