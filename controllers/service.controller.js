@@ -1,5 +1,9 @@
-const database = require("../config/databse.config");
-const { createNewService, getServiceName } = require("../services/services.service");
+// const database = require("../config/database.config");
+const {
+  createNewService,
+  getServiceName,
+  getAllServices,
+} = require("../services/services.service");
 
 module.exports = {
   createService: (req, res) => {
@@ -10,39 +14,52 @@ module.exports = {
         console.log(err);
         return res.status(500).json({
           error: true,
-          message: "Database connection error"
+          message: "Database connection error",
         });
       }
 
       return res.status(200).json({
         error: false,
-        data: result
+        data: result,
       });
-    })
+    });
+  },
+
+  getServices: (req, res) => {
+    getAllServices((err, result) => {
+      if (err) {
+        return console.log(err);
+      }
+
+      return res.status(200).json({
+        error: false,
+        data: result,
+      });
+    });
   },
 
   getServiceByName: (req, res) => {
     const serviceName = req.params.serviceName;
     getServiceName(serviceName, (err, result) => {
-      if(err) {
+      if (err) {
         console.log(err);
         return res.status(400).json({
           error: true,
-          message: "Bad request"
+          message: "Bad request",
         });
       }
 
       if (!result) {
         return res.status(404).json({
           error: true,
-          message: "Service not found"
+          message: "Service not found",
         });
       }
 
       return res.status(200).json({
         error: false,
-        data: result
+        data: result,
       });
     });
-  }
-}
+  },
+};
