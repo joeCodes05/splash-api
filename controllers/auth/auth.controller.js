@@ -45,8 +45,45 @@ const createUsers = async (req, res) => {
                   message: "Something went wrong, please try again",
                 });
               } else {
-                const mailer = nodemailer.createTransport({
-                  host,
+                const transporter = nodemailer.createTransport({
+                  service: "Gmail",
+                  auth: {
+                    user: process.env.NODEMAILER_EMAIL,
+                    pass: process.env.NODEMAILER_EMAIL_PASSWORD,
+                  },
+                });
+
+                const html = `
+                  <section style="text-align: center; padding: 1rem; background-color: #eeeeee;">
+                    <h2>Hi,</h2>
+                    <p>You have registered on <a href="http://localhost:3000">Splash</a></p>
+                    <p>Please click on this verification link <a href="http://localhost:3000/verify?email=${email}&token=${token}">Click here</a> to complete your registration</p>
+                    <small>If you did not initiate this action. Please, ignore the message.</small>
+                    <p>Thank you!</p>
+                  </section>
+                `;
+
+                const mailOptions = {
+                  from: process.env.NODEMAILER_EMAIL,
+                  to: email,
+                  subject: "Account verification message from Splash",
+                  html,
+                };
+
+                transporter.sendMail(mailOptions, (err, info) => {
+                  if (err) {
+                    console.error(`Error sending email`, err);
+                  } else {
+                    if (info.accepted) {
+                      console.log(info.messageId);
+                      database.commit();
+                    } else if (info.rejected) {
+                      return res.status(400).json({
+                        error: true,
+                        message: "Sorry, we could not send your mail",
+                      });
+                    }
+                  }
                 });
               }
             }
@@ -56,3 +93,5 @@ const createUsers = async (req, res) => {
     }
   );
 };
+
+module.exports = { createUsers };
