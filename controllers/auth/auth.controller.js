@@ -1,6 +1,5 @@
 const bcrypt = require("bcryptjs");
-const url = require("url");
-const jwt = require("jsonwebtoken");
+// const jwt = require("jsonwebtoken");
 const nodemailer = require("nodemailer");
 
 const database = require("../../config/database.config");
@@ -37,7 +36,7 @@ const createUsers = async (req, res) => {
           const token = randomUUID();
           database.beginTransaction(
             `INSERT INTO ${table} (full_name, user_name, email, password, token) VALUES (?, ?, ?, ?, ?)`,
-            [full_name, user_name, email, password, token],
+            [full_name, user_name, email, hashPassword, token],
             (err) => {
               if (err) {
                 return res.status(500).json({
