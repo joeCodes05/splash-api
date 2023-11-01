@@ -19,7 +19,7 @@ database.connect((err) => {
       user_name VARCHAR(255) NOT NULL,
       email VARCHAR(255) NOT NULL,
       password VARCHAR(255) NOT NULL,
-      profile_image VARCHAR(255) NULL,
+      profile_image VARCHAR(255) NOT NULL,
       status TINYINT(5) DEFAULT 1,
       token VARCHAR(100) NULL,
       created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
